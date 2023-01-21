@@ -1,24 +1,25 @@
 package ua.ithillel.lms.service;
 
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ua.ithillel.lms.exception.ProductNotFoundException;
 import ua.ithillel.lms.model.Product;
+import ua.ithillel.lms.model.ProductList;
 import ua.ithillel.lms.repository.ProductRepository;
 
+@Service
 public class Cart {
 
   private final ProductRepository productRepository;
 
   @Autowired
   @Getter
-  private final List<Product> products;
+  private final ProductList productList;
 
   public Cart(ProductRepository productRepository) {
     this.productRepository = productRepository;
-    this.products = new ArrayList<>();
+    this.productList = new ProductList();
   }
 
   /**
@@ -31,7 +32,7 @@ public class Cart {
     boolean isInCart = false;
     boolean isOutOfStore = false;
     if (productRepository.getProducts().contains(product)) {
-      isInCart = products.add(product);
+      isInCart = productList.getProducts().add(product);
       isOutOfStore = productRepository.getProducts().remove(product);
     }
     return isInCart && isOutOfStore;
@@ -47,25 +48,17 @@ public class Cart {
   public boolean removeProduct(long id) throws ProductNotFoundException {
     boolean isOutOfCart;
     boolean isInStore = false;
-    Product product = products.stream().filter((p) -> p.getId() == id).findFirst()
+    Product product = productList.getProducts().stream().filter((p) -> p.getId() == id).findFirst()
         .orElseThrow(() -> new ProductNotFoundException(id));
-    isOutOfCart = products.remove(product);
+    isOutOfCart = productList.getProducts().remove(product);
     if (!productRepository.getProducts().contains(product)) {
       isInStore = productRepository.getProducts().add(product);
     }
     return isOutOfCart && isInStore;
   }
 
+  @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder("ID\tName\tPrice\n");
-    for (Product product : products) {
-      sb.append(product.getId());
-      sb.append("\t");
-      sb.append(product.getName());
-      sb.append("\t");
-      sb.append(String.format("%.2f", product.getPrice()));
-      sb.append("\n");
-    }
-    return sb.toString();
+    return "Cart:\n" + productList;
   }
 }

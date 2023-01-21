@@ -14,7 +14,7 @@ public class StoreService {
 
   public void buy() {
     try {
-      System.out.println("Initial assortment:");
+      System.out.println("Initially:");
       System.out.println(productRepository);
       Product product1 = productRepository.getProductById(1);
       System.out.println("The first product I will add to my cart:");
@@ -24,7 +24,7 @@ public class StoreService {
       if (addedToCart) {
         System.out.println("My cart after adding:");
         System.out.println(cart);
-        System.out.println("Assortment after adding to cart:");
+        System.out.println("After adding to cart:");
         System.out.println(productRepository);
       }
       Product product5 = productRepository.getProductById(5);
@@ -34,7 +34,7 @@ public class StoreService {
       if (addedToCart) {
         System.out.println("My cart after adding:");
         System.out.println(cart);
-        System.out.println("Assortment after adding to cart:");
+        System.out.println("After adding to cart:");
         System.out.println(productRepository);
       }
       System.out.println("Than I decide not to buy the latest product I added:");
@@ -42,7 +42,7 @@ public class StoreService {
       if (removedFromCart) {
         System.out.println("My cart after deleting:");
         System.out.println(cart);
-        System.out.println("Assortment after deleting from cart:");
+        System.out.println("After deleting from cart:");
         System.out.println(productRepository);
       }
     } catch (ProductNotFoundException e) {
